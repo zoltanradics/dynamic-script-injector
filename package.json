@@ -1,0 +1,14 @@
+{
+  "name": "@zoltanradics/dynamic-script-injector",
+  "version": "0.1.0",
+  "description": "Dynamic javascript injector",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "",
+  "license": "ISC"
+}
