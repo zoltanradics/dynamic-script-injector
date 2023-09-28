@@ -1,5 +1,5 @@
 
-export function dynamicScriptInjector(baseUrl: string, queryParamObject: any) {
+export function dynamicScriptInjector(baseUrl: string, queryParamObject: { [key: string]: string }) {
 	const timeoutDuration = 2000;
 	const constructedUrl = generateUrl(baseUrl, queryParamObject);
 
