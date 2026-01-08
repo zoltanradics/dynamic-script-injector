@@ -37,7 +37,7 @@ export function dynamicScriptInjector(baseUrl: string, queryParamObject: { [key:
 
 function generateUrl(baseUrl: string, queryParamsObject: { [key: string]: string }): string {
 	const queryString = Object.keys(queryParamsObject).reduce((acc, key) => {
-		return `${acc === '' ? '?' : '&'}${key}=${queryParamsObject[key]}`;
+		return `${acc}${acc === '' ? '?' : '&'}${key}=${queryParamsObject[key]}`;
 	}, '');
 
 	return `${baseUrl}${queryString}`;
