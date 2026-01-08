@@ -1,5 +1,5 @@
 
-export function dynamicScriptInjector(baseUrl: string, queryParamObject: { [key: string]: string }) {
+export function dynamicScriptInjector(baseUrl: string, queryParamObject: { [key: string]: string }): Promise<void> {
 	const timeoutDuration = 2000;
 	const constructedUrl = generateUrl(baseUrl, queryParamObject);
 
@@ -9,35 +9,48 @@ export function dynamicScriptInjector(baseUrl: string, queryParamObject: { [key:
 	scriptElement.async = true;
 
 	// Insert element to the end of the <head> element
-	const headElement = document.getElementsByTagName('head');
-	headElement[0].insertAdjacentElement('beforeend', scriptElement);
+	const headElement = document.getElementsByTagName('head')[0];
+	if (!headElement) {
+		return Promise.reject(new Error('No <head> element found in document'));
+	}
+	headElement.insertAdjacentElement('beforeend', scriptElement);
 
 	return new Promise(function (resolve, reject) {
 		// Resolve  promise automatically when we ran out of time
 		const timeout = setTimeout(() => {
+			cleanup();
 			resolve();
-			clearTimeout(timeout);
 			console.warn(`${constructedUrl} was loading for too long time.`);
 		}, timeoutDuration);
 
-		// Handle when script is loaded successfully
-		scriptElement.addEventListener('load', function (event: Event) {
-			resolve();
+		const cleanup = () => {
 			clearTimeout(timeout);
-		});
+			scriptElement.removeEventListener('load', onLoad);
+			scriptElement.removeEventListener('error', onError);
+		};
+
+		// Handle when script is loaded successfully
+		const onLoad = function (event: Event) {
+			cleanup();
+			resolve();
+		};
 
 		// Handle when there was an error while loading the script
-		scriptElement.addEventListener('error', function (event: Event) {
-			reject(event);
-			clearTimeout(timeout);
-			throw new Error(`Failed to load ${constructedUrl}.`);
-		});
+		const onError = function (event: Event) {
+			cleanup();
+			reject(new Error(`Failed to load ${constructedUrl}.`));
+		};
+
+		scriptElement.addEventListener('load', onLoad);
+		scriptElement.addEventListener('error', onError);
 	});
 }
 
 function generateUrl(baseUrl: string, queryParamsObject: { [key: string]: string }): string {
 	const queryString = Object.keys(queryParamsObject).reduce((acc, key) => {
-		return `${acc}${acc === '' ? '?' : '&'}${key}=${queryParamsObject[key]}`;
+		const encodedKey = encodeURIComponent(key);
+		const encodedValue = encodeURIComponent(queryParamsObject[key]);
+		return `${acc}${acc === '' ? '?' : '&'}${encodedKey}=${encodedValue}`;
 	}, '');
 
 	return `${baseUrl}${queryString}`;
