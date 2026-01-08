@@ -3,22 +3,300 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Script Injector - Dev</title>
+  <title>Dynamic Script Injector - Interactive Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      padding: 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section h2 {
+      color: #333;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      padding: 1rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border: 2px solid #667eea;
+      background: white;
+      color: #667eea;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+    }
+
+    button:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    button.clear-btn {
+      border-color: #e74c3c;
+      color: #e74c3c;
+    }
+
+    button.clear-btn:hover {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .log-panel {
+      background: #1e1e1e;
+      border-radius: 8px;
+      padding: 1rem;
+      height: 400px;
+      overflow-y: auto;
+      font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+
+    .log-entry {
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+      border-left: 3px solid;
+    }
+
+    .log-entry.success {
+      background: rgba(39, 174, 96, 0.1);
+      border-color: #27ae60;
+      color: #27ae60;
+    }
+
+    .log-entry.error {
+      background: rgba(231, 76, 60, 0.1);
+      border-color: #e74c3c;
+      color: #e74c3c;
+    }
+
+    .log-entry.warning {
+      background: rgba(241, 196, 15, 0.1);
+      border-color: #f1c40f;
+      color: #f1c40f;
+    }
+
+    .log-entry.info {
+      background: rgba(52, 152, 219, 0.1);
+      border-color: #3498db;
+      color: #3498db;
+    }
+
+    .timestamp {
+      opacity: 0.7;
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+    }
+
+    .empty-log {
+      color: #888;
+      text-align: center;
+      padding: 2rem;
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
-  <h1>Dynamic Script Injector Development</h1>
-  <p>Open the console to test the script injector.</p>
-  <script type="module" src="/src/index.ts"></script>
+  <div class="container">
+    <div class="header">
+      <h1>Dynamic Script Injector</h1>
+      <p>Interactive Demo - Test successful and unsuccessful script loading</p>
+    </div>
+
+    <div class="content">
+      <div class="section">
+        <h2>Success Scenarios</h2>
+        <div class="button-grid">
+          <button id="btn-local">Load Local Script</button>
+          <button id="btn-cdn">Load Lodash from CDN</button>
+          <button id="btn-params">Load Script with Query Params</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Failure Scenarios</h2>
+        <div class="button-grid">
+          <button id="btn-404">Load Non-existent Script (404)</button>
+          <button id="btn-invalid">Load from Invalid Domain</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Log Output</h2>
+        <button id="btn-clear" class="clear-btn" style="margin-bottom: 1rem; width: 100%;">Clear Logs</button>
+        <div class="log-panel" id="log-panel">
+          <div class="empty-log">Click a button above to start testing...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { dynamicScriptInjector } from '/src/index.ts';
 
-    // Example usage - uncomment to test
-    // dynamicScriptInjector('https://example.com/script.js', { version: '1.0', test: 'true' })
-    //   .then(() => console.log('Script loaded successfully'))
-    //   .catch(err => console.error('Script failed to load', err));
+    const logPanel = document.getElementById('log-panel');
+    let logCount = 0;
 
-    console.log('dynamicScriptInjector is available globally for testing');
-    window.dynamicScriptInjector = dynamicScriptInjector;
+    // Helper function to add log entries
+    function addLog(message, type = 'info') {
+      // Remove empty log message if it exists
+      const emptyLog = logPanel.querySelector('.empty-log');
+      if (emptyLog) {
+        emptyLog.remove();
+      }
+
+      const timestamp = new Date().toLocaleTimeString();
+      const logEntry = document.createElement('div');
+      logEntry.className = `log-entry ${type}`;
+      logEntry.innerHTML = `<span class="timestamp">[${timestamp}]</span>${message}`;
+      logPanel.appendChild(logEntry);
+      logPanel.scrollTop = logPanel.scrollHeight;
+
+      logCount++;
+      console.log(`[${type.toUpperCase()}]`, message);
+    }
+
+    // Success scenario 1: Load local script
+    document.getElementById('btn-local').addEventListener('click', async () => {
+      addLog('Loading local success.js script...', 'info');
+      try {
+        await dynamicScriptInjector('/example-scripts/success.js', {});
+        addLog('Local script loaded successfully!', 'success');
+        if (window.exampleScriptLoaded) {
+          addLog(`Verified: window.exampleScriptLoaded = ${window.exampleScriptLoaded}`, 'success');
+        }
+      } catch (error) {
+        addLog(`Failed to load local script: ${error}`, 'error');
+      }
+    });
+
+    // Success scenario 2: Load CDN script (lodash)
+    document.getElementById('btn-cdn').addEventListener('click', async () => {
+      addLog('Loading Lodash from CDN...', 'info');
+      try {
+        await dynamicScriptInjector('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js', {});
+        addLog('Lodash loaded successfully from CDN!', 'success');
+        if (typeof _ !== 'undefined') {
+          addLog(`Verified: lodash version ${_.VERSION} is available`, 'success');
+        }
+      } catch (error) {
+        addLog(`Failed to load Lodash: ${error}`, 'error');
+      }
+    });
+
+    // Success scenario 3: Load script with query parameters
+    document.getElementById('btn-params').addEventListener('click', async () => {
+      addLog('Loading script with query parameters (user=demo, version=1.0)...', 'info');
+      try {
+        await dynamicScriptInjector('/example-scripts/with-params.js', {
+          user: 'demo',
+          version: '1.0',
+          timestamp: Date.now().toString()
+        });
+        addLog('Script with parameters loaded successfully!', 'success');
+        if (window.paramsReceived) {
+          addLog(`Received parameters: ${JSON.stringify(window.paramsReceived)}`, 'success');
+        }
+      } catch (error) {
+        addLog(`Failed to load script with params: ${error}`, 'error');
+      }
+    });
+
+    // Failure scenario 1: 404 error
+    document.getElementById('btn-404').addEventListener('click', async () => {
+      addLog('Attempting to load non-existent script...', 'info');
+      try {
+        await dynamicScriptInjector('https://example.com/nonexistent-script-12345.js', {});
+        addLog('Unexpected: Script loaded (should have failed)', 'warning');
+      } catch (error) {
+        addLog(`Expected failure: ${error}`, 'error');
+      }
+    });
+
+    // Failure scenario 2: Invalid domain
+    document.getElementById('btn-invalid').addEventListener('click', async () => {
+      addLog('Attempting to load from invalid domain...', 'info');
+      try {
+        await dynamicScriptInjector('https://this-domain-definitely-does-not-exist-12345.com/script.js', {});
+        addLog('Unexpected: Script loaded (should have failed)', 'warning');
+      } catch (error) {
+        addLog(`Expected failure: ${error}`, 'error');
+      }
+    });
+
+    // Clear logs
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      logPanel.innerHTML = '<div class="empty-log">Logs cleared. Click a button above to start testing...</div>';
+      logCount = 0;
+      addLog('Logs cleared', 'info');
+    });
+
+    // Initial log
+    addLog('Demo ready! Click any button above to test the script injector.', 'info');
   </script>
 </body>
 </html>
