@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Script Injector - Dev</title>
+</head>
+<body>
+  <h1>Dynamic Script Injector Development</h1>
+  <p>Open the console to test the script injector.</p>
+  <script type="module" src="/src/index.ts"></script>
+  <script type="module">
+    import { dynamicScriptInjector } from '/src/index.ts';
+
+    // Example usage - uncomment to test
+    // dynamicScriptInjector('https://example.com/script.js', { version: '1.0', test: 'true' })
+    //   .then(() => console.log('Script loaded successfully'))
+    //   .catch(err => console.error('Script failed to load', err));
+
+    console.log('dynamicScriptInjector is available globally for testing');
+    window.dynamicScriptInjector = dynamicScriptInjector;
+  </script>
+</body>
+</html>
