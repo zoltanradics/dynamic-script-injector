@@ -9,9 +9,9 @@
   "jsdelivr": "./dist/index.umd.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.umd.js"
     }
   },
   "files": [
@@ -21,13 +21,32 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
-    "javascript"
+    "javascript",
+    "dynamic-script",
+    "script-loader",
+    "promise",
+    "typescript",
+    "script-injection",
+    "async-script",
+    "cdn"
   ],
-  "author": "",
+  "author": "Zoltan Radics",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zoltanradics/dynamic-script-injector.git"
+  },
+  "homepage": "https://github.com/zoltanradics/dynamic-script-injector#readme",
+  "bugs": {
+    "url": "https://github.com/zoltanradics/dynamic-script-injector/issues"
+  },
   "devDependencies": {
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
