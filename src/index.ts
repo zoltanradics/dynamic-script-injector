@@ -14,15 +14,15 @@ export function dynamicScriptInjector(baseUrl: string, queryParamObject: { [key:
 
 	return new Promise(function (resolve, reject) {
 		// Resolve  promise automatically when we ran out of time
-		const timeout = setTimeout((event) => {
-			resolve(event);
+		const timeout = setTimeout(() => {
+			resolve();
 			clearTimeout(timeout);
 			console.warn(`${constructedUrl} was loading for too long time.`);
 		}, timeoutDuration);
 
 		// Handle when script is loaded successfully
 		scriptElement.addEventListener('load', function (event: Event) {
-			resolve(event);
+			resolve();
 			clearTimeout(timeout);
 		});
 
