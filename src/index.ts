@@ -1,5 +1,5 @@
 
-export function dynamicScriptInjector(baseUrl: string, queryParamObject: { [key: string]: string }): Promise<void> {
+export function asyncScriptLoader(baseUrl: string, queryParamObject: { [key: string]: string }): Promise<void> {
 	const timeoutDuration = 2000;
 	const constructedUrl = generateUrl(baseUrl, queryParamObject);
 

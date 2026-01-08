@@ -1,4 +1,4 @@
-# Dynamic Script Injector
+# Async Script Loader
 
 A lightweight TypeScript library for dynamically loading external JavaScript files with promise-based API and automatic timeout handling.
 
@@ -34,7 +34,7 @@ This library is **not** a replacement for the native `import()` function. They s
 ## Installation
 
 ```bash
-npm install @zoltanradics/dynamic-script-injector
+npm install @zoltanradics/async-script-loader
 ```
 
 ## Usage
@@ -42,10 +42,10 @@ npm install @zoltanradics/dynamic-script-injector
 ### ES Module (Bundlers, Modern JavaScript)
 
 ```javascript
-import { dynamicScriptInjector } from '@zoltanradics/dynamic-script-injector';
+import { asyncScriptLoader } from '@zoltanradics/async-script-loader';
 
 // Load a script with query parameters
-dynamicScriptInjector('https://example.com/script.js', {
+asyncScriptLoader('https://example.com/script.js', {
   version: '1.0',
   apiKey: 'your-api-key',
   env: 'production'
@@ -65,18 +65,18 @@ dynamicScriptInjector('https://example.com/script.js', {
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dynamic Script Injector Example</title>
+  <title>Async Script Loader Example</title>
 </head>
 <body>
   <!-- Load from unpkg -->
-  <script src="https://unpkg.com/@zoltanradics/dynamic-script-injector"></script>
+  <script src="https://unpkg.com/@zoltanradics/async-script-loader"></script>
 
   <!-- Or load from jsDelivr -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@zoltanradics/dynamic-script-injector"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@zoltanradics/async-script-loader"></script> -->
 
   <script>
-    // Access via global DynamicScriptInjector object
-    DynamicScriptInjector.dynamicScriptInjector(
+    // Access via global AsyncScriptLoader object
+    AsyncScriptLoader.asyncScriptLoader(
       'https://example.com/analytics.js',
       { userId: '12345', tracking: 'enabled' }
     )
@@ -92,11 +92,11 @@ dynamicScriptInjector('https://example.com/script.js', {
 The library includes TypeScript definitions out of the box:
 
 ```typescript
-import { dynamicScriptInjector } from '@zoltanradics/dynamic-script-injector';
+import { asyncScriptLoader } from '@zoltanradics/async-script-loader';
 
 const loadScript = async (): Promise<void> => {
   try {
-    await dynamicScriptInjector('https://api.example.com/sdk.js', {
+    await asyncScriptLoader('https://api.example.com/sdk.js', {
       version: '2.0',
       debug: 'true'
     });
@@ -112,7 +112,7 @@ loadScript();
 
 ## API
 
-### `dynamicScriptInjector(baseUrl, queryParamObject)`
+### `asyncScriptLoader(baseUrl, queryParamObject)`
 
 Dynamically injects a script tag into the document head and returns a Promise.
 
@@ -140,9 +140,9 @@ Dynamically injects a script tag into the document head and returns a Promise.
 ### Loading Google Analytics
 
 ```javascript
-import { dynamicScriptInjector } from '@zoltanradics/dynamic-script-injector';
+import { asyncScriptLoader } from '@zoltanradics/async-script-loader';
 
-dynamicScriptInjector('https://www.googletagmanager.com/gtag/js', {
+asyncScriptLoader('https://www.googletagmanager.com/gtag/js', {
   id: 'G-XXXXXXXXXX'
 })
   .then(() => {
@@ -156,14 +156,14 @@ dynamicScriptInjector('https://www.googletagmanager.com/gtag/js', {
 ### Loading Multiple Scripts Sequentially
 
 ```javascript
-import { dynamicScriptInjector } from '@zoltanradics/dynamic-script-injector';
+import { asyncScriptLoader } from '@zoltanradics/async-script-loader';
 
 async function loadScripts() {
   try {
-    await dynamicScriptInjector('https://cdn.example.com/library.js', {});
+    await asyncScriptLoader('https://cdn.example.com/library.js', {});
     console.log('Library loaded');
 
-    await dynamicScriptInjector('https://cdn.example.com/plugin.js', {
+    await asyncScriptLoader('https://cdn.example.com/plugin.js', {
       theme: 'dark'
     });
     console.log('Plugin loaded');
@@ -180,12 +180,12 @@ loadScripts();
 ### Loading Scripts in Parallel
 
 ```javascript
-import { dynamicScriptInjector } from '@zoltanradics/dynamic-script-injector';
+import { asyncScriptLoader } from '@zoltanradics/async-script-loader';
 
 Promise.all([
-  dynamicScriptInjector('https://cdn.example.com/script1.js', {}),
-  dynamicScriptInjector('https://cdn.example.com/script2.js', {}),
-  dynamicScriptInjector('https://cdn.example.com/script3.js', {})
+  asyncScriptLoader('https://cdn.example.com/script1.js', {}),
+  asyncScriptLoader('https://cdn.example.com/script2.js', {}),
+  asyncScriptLoader('https://cdn.example.com/script3.js', {})
 ])
   .then(() => {
     console.log('All scripts loaded successfully');

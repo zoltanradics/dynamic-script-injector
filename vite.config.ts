@@ -5,7 +5,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: './src/index.ts',
-      name: 'DynamicScriptInjector',
+      name: 'AsyncScriptLoader',
       fileName: (format) => `index.${format}.js`,
       formats: ['es', 'umd']
     },

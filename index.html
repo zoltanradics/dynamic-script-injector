@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Script Injector - Interactive Demo</title>
+  <title>Async Script Loader - Interactive Demo</title>
   <style>
     * {
       margin: 0;
@@ -163,7 +163,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>Dynamic Script Injector</h1>
+      <h1>Async Script Loader</h1>
       <p>Interactive Demo - Test successful and unsuccessful script loading</p>
     </div>
 
@@ -196,7 +196,7 @@
   </div>
 
   <script type="module">
-    import { dynamicScriptInjector } from '/src/index.ts';
+    import { asyncScriptLoader } from '/src/index.ts';
 
     const logPanel = document.getElementById('log-panel');
     let logCount = 0;
@@ -224,7 +224,7 @@
     document.getElementById('btn-local').addEventListener('click', async () => {
       addLog('Loading local success.js script...', 'info');
       try {
-        await dynamicScriptInjector('/example-scripts/success.js', {});
+        await asyncScriptLoader('/example-scripts/success.js', {});
         addLog('Local script loaded successfully!', 'success');
         if (window.exampleScriptLoaded) {
           addLog(`Verified: window.exampleScriptLoaded = ${window.exampleScriptLoaded}`, 'success');
@@ -238,7 +238,7 @@
     document.getElementById('btn-cdn').addEventListener('click', async () => {
       addLog('Loading Lodash from CDN...', 'info');
       try {
-        await dynamicScriptInjector('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js', {});
+        await asyncScriptLoader('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js', {});
         addLog('Lodash loaded successfully from CDN!', 'success');
         if (typeof _ !== 'undefined') {
           addLog(`Verified: lodash version ${_.VERSION} is available`, 'success');
@@ -252,7 +252,7 @@
     document.getElementById('btn-params').addEventListener('click', async () => {
       addLog('Loading script with query parameters (user=demo, version=1.0)...', 'info');
       try {
-        await dynamicScriptInjector('/example-scripts/with-params.js', {
+        await asyncScriptLoader('/example-scripts/with-params.js', {
           user: 'demo',
           version: '1.0',
           timestamp: Date.now().toString()
@@ -270,7 +270,7 @@
     document.getElementById('btn-404').addEventListener('click', async () => {
       addLog('Attempting to load non-existent script...', 'info');
       try {
-        await dynamicScriptInjector('https://example.com/nonexistent-script-12345.js', {});
+        await asyncScriptLoader('https://example.com/nonexistent-script-12345.js', {});
         addLog('Unexpected: Script loaded (should have failed)', 'warning');
       } catch (error) {
         addLog(`Expected failure: ${error}`, 'error');
@@ -281,7 +281,7 @@
     document.getElementById('btn-invalid').addEventListener('click', async () => {
       addLog('Attempting to load from invalid domain...', 'info');
       try {
-        await dynamicScriptInjector('https://this-domain-definitely-does-not-exist-12345.com/script.js', {});
+        await asyncScriptLoader('https://this-domain-definitely-does-not-exist-12345.com/script.js', {});
         addLog('Unexpected: Script loaded (should have failed)', 'warning');
       } catch (error) {
         addLog(`Expected failure: ${error}`, 'error');
@@ -296,7 +296,7 @@
     });
 
     // Initial log
-    addLog('Demo ready! Click any button above to test the script injector.', 'info');
+    addLog('Demo ready! Click any button above to test the script loader.', 'info');
   </script>
 </body>
 </html>
