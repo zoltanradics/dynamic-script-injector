@@ -47,10 +47,21 @@ export function dynamicScriptInjector(baseUrl: string, queryParamObject: { [key:
 }
 
 function generateUrl(baseUrl: string, queryParamsObject: { [key: string]: string }): string {
-	const queryString = Object.keys(queryParamsObject).reduce((acc, key) => {
+	const keys = Object.keys(queryParamsObject);
+
+	// If no query params to add, return baseUrl as-is
+	if (keys.length === 0) {
+		return baseUrl;
+	}
+
+	// Determine the first separator based on whether baseUrl already has query params
+	const firstSeparator = baseUrl.includes('?') ? '&' : '?';
+
+	const queryString = keys.reduce((acc, key, index) => {
 		const encodedKey = encodeURIComponent(key);
 		const encodedValue = encodeURIComponent(queryParamsObject[key]);
-		return `${acc}${acc === '' ? '?' : '&'}${encodedKey}=${encodedValue}`;
+		const separator = index === 0 ? firstSeparator : '&';
+		return `${acc}${separator}${encodedKey}=${encodedValue}`;
 	}, '');
 
 	return `${baseUrl}${queryString}`;
