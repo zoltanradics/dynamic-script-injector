@@ -1,5 +1,31 @@
 
 export function asyncScriptLoader(baseUrl: string, queryParamObject: { [key: string]: string }): Promise<void> {
+	// Validate baseUrl
+	if (typeof baseUrl !== 'string') {
+		return Promise.reject(new TypeError('baseUrl must be a string'));
+	}
+	if (baseUrl.trim() === '') {
+		return Promise.reject(new Error('baseUrl cannot be empty'));
+	}
+	try {
+		new URL(baseUrl);
+	} catch {
+		return Promise.reject(new Error('baseUrl must be a valid URL'));
+	}
+
+	// Validate queryParamObject
+	if (queryParamObject === null || queryParamObject === undefined) {
+		return Promise.reject(new TypeError('queryParamObject must be an object'));
+	}
+	if (typeof queryParamObject !== 'object' || Array.isArray(queryParamObject)) {
+		return Promise.reject(new TypeError('queryParamObject must be a plain object'));
+	}
+	for (const key of Object.keys(queryParamObject)) {
+		if (typeof queryParamObject[key] !== 'string') {
+			return Promise.reject(new TypeError(`queryParamObject value for key "${key}" must be a string`));
+		}
+	}
+
 	const timeoutDuration = 2000;
 	const constructedUrl = generateUrl(baseUrl, queryParamObject);
 
@@ -47,6 +73,27 @@ export function asyncScriptLoader(baseUrl: string, queryParamObject: { [key: str
 }
 
 function generateUrl(baseUrl: string, queryParamsObject: { [key: string]: string }): string {
+	// Validate baseUrl
+	if (typeof baseUrl !== 'string') {
+		throw new TypeError('baseUrl must be a string');
+	}
+	if (baseUrl.trim() === '') {
+		throw new Error('baseUrl cannot be empty');
+	}
+
+	// Validate queryParamsObject
+	if (queryParamsObject === null || queryParamsObject === undefined) {
+		throw new TypeError('queryParamsObject must be an object');
+	}
+	if (typeof queryParamsObject !== 'object' || Array.isArray(queryParamsObject)) {
+		throw new TypeError('queryParamsObject must be a plain object');
+	}
+	for (const key of Object.keys(queryParamsObject)) {
+		if (typeof queryParamsObject[key] !== 'string') {
+			throw new TypeError(`queryParamsObject value for key "${key}" must be a string`);
+		}
+	}
+
 	const keys = Object.keys(queryParamsObject);
 
 	// If no query params to add, return baseUrl as-is
